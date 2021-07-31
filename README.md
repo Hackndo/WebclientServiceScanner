@@ -1,7 +1,7 @@
 # WebClient Service Scanner
 
 
-<!-- ![Example](https://github.com/Hackndo/WebclientServiceScanner/raw/master/assets/demo.png) -->
+<!-- ![Example](https://raw.githubusercontent.com/Hackndo/WebclientServiceScanner/master/assets/demo.png) -->
 
 
 Python tool to Check running WebClient services on multiple targets based on [@tifkin_ idea](https://twitter.com/tifkin_/status/1419806476353298442).
