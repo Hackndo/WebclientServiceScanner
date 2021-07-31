@@ -17,7 +17,7 @@ from impacket.smb import SMB_DIALECT
 from impacket.smb3structs import SMB2_DIALECT_21, SMB2_DIALECT_311
 
 from webclientservicescanner.core import ThreadPool
-from webclientservicescanner.utils import get_targets, banner
+from webclientservicescanner.utils import get_targets, banner, validate_credentials
 
 
 def main():
@@ -38,8 +38,8 @@ def main():
                             '(KRB5CCNAME) based on target parameters. If valid credentials '
                             'cannot be found, it will use the ones specified in the command '
                             'line')
-    group.add_argument('-aesKey', action="store", metavar="hex key", help='AES key to use for Kerberos Authentication '
-                                                                          '(128 or 256 bits)')
+    group.add_argument('-aesKey', action="store", metavar="hex key", help='AES key to use for Kerberos Authentication ')
+    group.add_argument('-no-validation', action="store_true", help='Bypass credentials validation')
 
     group = parser.add_argument_group('connection')
 
@@ -84,6 +84,11 @@ def main():
             (SMB2_DIALECT_311, '3')
         )
         options.smb_version = [version[0] for version in smb_versions if version[1] == options.smb_version][0]
+
+    if not options.no_validation:
+        ret = validate_credentials(username, domain, password, options.dc_ip, options.k, lmhash, nthash, options.aesKey, options.debug)
+        if not ret:
+            return False
 
     threadPool = ThreadPool(
         targets,

@@ -110,9 +110,6 @@ class ThreadPool:
             print("Quitting.")
 
 
-
-
-
 class WebdavClientScanner:
     def __init__(self, address, target_ip, smb_version, username, password, domain, lmhash, nthash, aesKey, dc_ip, k, debug):
         self.address = address

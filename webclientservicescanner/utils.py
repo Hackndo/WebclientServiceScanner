@@ -10,7 +10,10 @@
 
 
 import os
+import sys
+import socket
 
+from impacket.smbconnection import SMBConnection, SessionError
 from netaddr import IPRange, AddrFormatError, IPAddress, IPNetwork
 
 from . import __version__
@@ -69,3 +72,35 @@ def get_targets(targets):
         else:
             ret_targets += parse_targets(target)
     return [str(ip) for ip in ret_targets]
+
+
+def validate_credentials(username, domain, password, dc_ip, k, lmhash, nthash, aesKey, debug):
+    if dc_ip is None:
+        try:
+            dc_ip = socket.gethostbyname(domain)
+        except Exception as e:
+            print("Couldn't retrieve {} domain controller, specify it with -dc-ip parameter".format(domain))
+            return False
+    try:
+        smbClient = SMBConnection(domain, dc_ip, timeout=2)
+        if k is True:
+            smbClient.kerberosLogin(username, password, domain, lmhash, nthash, aesKey, dc_ip)
+        else:
+            smbClient.login(username, password, domain, lmhash, nthash)
+        return True
+    except SessionError as e:
+        if 'STATUS_LOGON_FAILURE' in str(e):
+            print("Credentials validation failed against {}. If you really want to use these credentials, use -no-validation flag. Beware of lockout.".format(dc_ip))
+            return False
+        else:
+            if debug:
+                import traceback
+                traceback.print_exc()
+            print("Credentials could not be checked, an error occurred")
+            return False
+    except Exception as e:
+        if debug:
+            import traceback
+            traceback.print_exc()
+        print("Credentials could not be checked, an error occurred")
+        return False
