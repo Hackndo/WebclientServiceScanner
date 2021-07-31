@@ -17,7 +17,7 @@ from . import __version__
 
 
 def banner():
-    return "WebClient Service Scanner v{} - by pixis (@hackanddo)\n".format(__version__)
+    return "WebClient Service Scanner v{} - pixis (@hackanddo) - Based on @tifkin_ idea\n".format(__version__)
 
 
 def parse_targets(target):
