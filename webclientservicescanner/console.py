@@ -11,6 +11,7 @@
 
 import argparse
 import sys
+import os
 
 from impacket.examples.utils import parse_target
 from impacket.smb import SMB_DIALECT
@@ -21,6 +22,7 @@ from webclientservicescanner.utils import get_targets, banner, validate_credenti
 
 
 def main():
+    os.system('color')
     print(banner())
     parser = argparse.ArgumentParser(add_help=True, description="SMB client implementation.")
 
