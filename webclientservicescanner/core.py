@@ -137,7 +137,7 @@ class WebdavClientScanner:
             for f in smbClient.listPath('IPC$', pwd):
                 if f.get_longname() == 'DAV RPC SERVICE':
                     with lock:
-                        print("{:>15} {}RUNNING{}".format('['+self.address+']', "", COLORS.GREEN, COLORS.ENDC))
+                        print("{:>15} {}RUNNING{}".format('['+self.address+']', COLORS.GREEN, COLORS.ENDC))
                     return True
             with lock:
                 print("{:>15} {}STOPPED{}".format('['+self.address+']', COLORS.RED, COLORS.ENDC))
@@ -152,6 +152,4 @@ class WebdavClientScanner:
                 with lock:
                     print(str(e))
             return False
-
-
-
+        
